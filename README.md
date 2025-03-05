@@ -8,4 +8,4 @@ Accident Detection: Utilizes sensors to detect emergencies and alert individuals
 Directional Guidance System: Provides real-time instructions to guide individuals in danger towards safer areas.
 Advanced Sensor Integration: Ensures accurate data collection for improved responsiveness.
 Scalable Design: Suitable for various safety applications, including public spaces and transportation systems.
-This project leverages Intel Galileo's capabilities to deliver an innovative solution aimed at community safety and emergency management.
+This project leverages Intel Galileo's capabilities to deliver an innovative solution aimed at community safety and emergency management. 
