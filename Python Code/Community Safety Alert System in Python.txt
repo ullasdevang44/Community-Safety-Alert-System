@@ -1,0 +1,107 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
+
+class Alert:
+    def __init__(self, title, description, status='Pending'):
+        self.title = title
+        self.description = description
+        self.status = status
+        self.timestamp = datetime.now()
+
+    def update_status(self, status):
+        self.status = status
+        self.timestamp = datetime.now()
+
+    def __str__(self):
+        return f"Alert: {self.title}\nDescription: {self.description}\nStatus: {self.status}\nTime: {self.timestamp}"
+
+class CommunitySafetySystem:
+    def __init__(self):
+        self.alerts = []
+
+    def add_alert(self, title, description):
+        alert = Alert(title, description)
+        self.alerts.append(alert)
+        print(f"New alert added: {title}")
+
+    def view_alerts(self):
+        if not self.alerts:
+            print("No alerts to display.")
+        else:
+            for alert in self.alerts:
+                print(alert)
+                print("-" * 40)
+
+    def resolve_alert(self, title):
+        for alert in self.alerts:
+            if alert.title == title:
+                alert.update_status('Resolved')
+                print(f"Alert '{title}' resolved.")
+                return
+        print(f"No alert found with the title: {title}")
+
+    def send_email_notification(self, subject, body, to_email):
+        from_email = "your_email@example.com"  # Replace with your email
+        password = "your_password"  # Replace with your email password (use app password for Gmail)
+
+        msg = MIMEMultipart()
+        msg['From'] = from_email
+        msg['To'] = to_email
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(body, 'plain'))
+
+        try:
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(from_email, password)
+            text = msg.as_string()
+            server.sendmail(from_email, to_email, text)
+            server.quit()
+            print(f"Email sent to {to_email}")
+        except Exception as e:
+            print(f"Failed to send email: {e}")
+
+# Main Program
+def main():
+    system = CommunitySafetySystem()
+
+    while True:
+        print("\nCommunity Safety Alert System")
+        print("1. Add New Alert")
+        print("2. View Alerts")
+        print("3. Resolve Alert")
+        print("4. Send Email Notification")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            title = input("Enter alert title: ")
+            description = input("Enter alert description: ")
+            system.add_alert(title, description)
+
+        elif choice == '2':
+            system.view_alerts()
+
+        elif choice == '3':
+            title = input("Enter alert title to resolve: ")
+            system.resolve_alert(title)
+
+        elif choice == '4':
+            subject = input("Enter subject of the email: ")
+            body = input("Enter body of the email: ")
+            to_email = input("Enter recipient email: ")
+            system.send_email_notification(subject, body, to_email)
+
+        elif choice == '5':
+            print("Exiting the system.")
+            break
+
+        else:
+            print("Invalid choice, please try again.")
+
+if __name__ == "__main__":
+    main()
